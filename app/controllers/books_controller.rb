@@ -11,10 +11,8 @@ class BooksController < ApplicationController
         render json: book, status: :ok
     end
 
-    # this isn't working
     def create
         book = Book.new(book_params)
-        author = Author.find(params[:author_id])
 
         if book.save
             render json: book, status: :created
@@ -22,6 +20,12 @@ class BooksController < ApplicationController
             render json: book.errors, status: :unprocessable_entity
         end
     end
+
+    # request in postman:
+    # {
+    #     "title": "Any Way the Wind Blows",
+    #     "author_id": 1
+    # }
 
     def update
         book = Book.find(params[:id])
@@ -46,6 +50,6 @@ class BooksController < ApplicationController
     private
 
     def book_params
-        params.require(:book).permit(:title, [author_attributes: [:id]])
+        params.require(:book).permit(:title, :author_id)
     end
 end
